@@ -200,6 +200,10 @@ alexa.app = function(name, endpoint) {
   this.endpoint = endpoint;
   // A mapping of keywords to arrays of possible values, for expansion of sample utterances
   this.dictionary = {};
+  this.routes = {};
+  this.route = function(routeName, func){
+    this.route[routeName] = func;
+  };
   this.intents = {};
   this.intent = function(intentName, schema, func) {
     if (typeof schema == "function") {
@@ -251,7 +255,7 @@ alexa.app = function(name, endpoint) {
       try {
         var key;
         // Copy all the session attributes from the request into the response so they persist.
-        // The Alexa API doesn't think session variables should persist for the entire 
+        // The Alexa API doesn't think session variables should persist for the entire
         // duration of the session, but I do.
         if (request.sessionAttributes && self.persistentSession) {
           for (key in request.sessionAttributes) {
