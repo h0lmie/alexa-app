@@ -110,8 +110,10 @@ alexa.response = function() {
   };
   this.session = function(key, val) {
     if (typeof val == "undefined") {
+      console.log('this.session(): typeof val == "undefined": ', this.response.sessionAttributes[key]);
       return this.response.sessionAttributes[key];
     } else {
+      console.log('this.session(), setting [key]:', key, val);
       this.response.sessionAttributes[key] = val;
     }
     return this;
@@ -257,8 +259,10 @@ alexa.app = function(name, endpoint) {
         // Copy all the session attributes from the request into the response so they persist.
         // The Alexa API doesn't think session variables should persist for the entire
         // duration of the session, but I do.
+        console.log('this.request(), copying session attributes....');
         if (request.sessionAttributes && self.persistentSession) {
           for (key in request.sessionAttributes) {
+            console.log('key:', key, 'val:', request.sessionAttributes[key]);
             response.session(key, request.sessionAttributes[key]);
           }
         }
@@ -360,9 +364,11 @@ alexa.app = function(name, endpoint) {
   this.handler = function(event, context) {
     self.request(event)
       .then(function(response) {
+        console.log('this.handler(): success! ', response)
         context.succeed(response);
       })
       .catch(function(response) {
+        console.error('this.handler(): fail! ', response)
         context.fail(response);
       });
   };
